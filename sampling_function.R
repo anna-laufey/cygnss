@@ -1,5 +1,7 @@
 
-CYGNSSsampling <- function(y, type, n) {
+# Function to get a subsample, with three different techniques to choose from
+
+CYGNSSsampling <- function(y, n, type = 'random') {
   
   # y - object to sample (? x 4 [ws, lon, lat, time])
   # type - string: 'random', or 'every-few', or 'averaging'
@@ -76,16 +78,19 @@ CYGNSSsampling <- function(y, type, n) {
   
 }
 
-# test cases ----
+# test cases: basic matrices ----
 
 # A = matrix(c(1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8), nrow = 8, ncol = 4)
 # A
-# CYGNSSsampling(A, 'random', 5)
-# CYGNSSsampling(A, 'random', 0.5)
-# CYGNSSsampling(A, 'every-few', 4)
-# CYGNSSsampling(A, 'every-few', 0.5)
-# CYGNSSsampling(A, 'averaging', 3)
-# CYGNSSsampling(A, 'averaging', 4)
-# CYGNSSsampling(A, 'averaging', 5)
-# CYGNSSsampling(A, 'averaging', 0.5)
+# CYGNSSsampling(A, 5, 'random')
+# CYGNSSsampling(A, 0.5, 'random')
+# CYGNSSsampling(A, 4, 'every-few')
+# CYGNSSsampling(A, 0.5, 'every-few')
+# CYGNSSsampling(A, 5, 'averaging')
+# CYGNSSsampling(A, 4, 'averaging')
+# CYGNSSsampling(A, 5, 'averaging')
+# CYGNSSsampling(A, 0.5, 'averaging')
 
+
+
+# test cases: CYGNSS data ----
