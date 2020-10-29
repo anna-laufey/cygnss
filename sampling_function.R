@@ -20,14 +20,14 @@ CYGNSSsampling <- function(y, type, n) {
   if (n < 0) { 
     print('ERROR: Invalid number of samples.')
     return(NULL)
-  } else if (n > len) {
+  } else if (n > rows) {
     print('ERROR: n is larger than the size of the population.')
     return(NULL)
   }
   
   #get the number of samples that are needed (Nsamples)
   if (n <= 1) { #get the number of samples that are needed (Nsamples)
-    Nsamples = floor(n*len)
+    Nsamples = floor(n*rows)
   } else {
     Nsamples = n
   }
@@ -43,12 +43,30 @@ CYGNSSsampling <- function(y, type, n) {
     
     by = floor(rows/Nsamples)
     ind = seq(1,rows,by)
+    ind = ind[1:Nsamples]
     sampledResult = y[ind,]
     return(sampledResult)
     
   } else if (type == 'averaging') { # average every few* observations together, *depending on Nsamples
     
-    # TO DO
+    by = floor(rows/Nsamples)
+    
+    ind = seq(1,rows,by)
+    ind = ind[1:Nsamples]
+    
+    sampledResult = matrix(nrow = Nsamples, ncol = 4)
+    
+    if (by > 1) {
+      k = 1
+      for (i in ind) {
+        sampledResult[k,] = colMeans(y[i:(i+by-1),])
+        k = k + 1
+      }
+    } else {
+      sampledResult = y[ind,]
+    }
+    
+    return(sampledResult)
     
   } else { # assert that input type is valid
     print('ERROR: Invalid type.')
@@ -57,3 +75,17 @@ CYGNSSsampling <- function(y, type, n) {
   
   
 }
+
+# test cases ----
+
+# A = matrix(c(1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8), nrow = 8, ncol = 4)
+# A
+# CYGNSSsampling(A, 'random', 5)
+# CYGNSSsampling(A, 'random', 0.5)
+# CYGNSSsampling(A, 'every-few', 4)
+# CYGNSSsampling(A, 'every-few', 0.5)
+# CYGNSSsampling(A, 'averaging', 3)
+# CYGNSSsampling(A, 'averaging', 4)
+# CYGNSSsampling(A, 'averaging', 5)
+# CYGNSSsampling(A, 'averaging', 0.5)
+
